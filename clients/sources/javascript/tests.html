@@ -1,0 +1,315 @@
+<html dir="ltr">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<style>
+			h1{
+				background-color:#ffffff;
+				color:#000000;
+				font-family:'Arial';
+				font-size:16px;
+			}
+			h2{
+				background-color:#ffffff;
+				color:#000000;
+				font-family:'Arial';
+				font-size:14px;
+			}
+			div.code{
+				background-color:#e0e0e0;
+				color:#000000;
+				font-family:'Courier New','Arial';
+				padding:4px;
+				font-size:12px;
+				margin-top:10px;
+			}
+			div.code>div.result{
+				background-color:#d0d0d0;
+				color:#000000;
+				font-family:'Courier New','Arial';
+				padding:8px;
+				font-size:12px;
+			}
+		</style>
+		<script charset="utf-8" src="./lib.js"></script>
+		<script charset="utf-8" src="./i18x.js"></script>
+		<script>
+			var wrex=""
+			function wrd(_t){
+				document.write(_t.htmlEntities());
+				document.write('<br><br>');
+			};
+			function wr(_t){
+				document.write(_t.htmlEntities());
+				document.write('<br><br>');
+				wrex+=_t+"document.write('<br>');";
+			};
+			function wrexec(){
+				eval(wrex);
+				wrex="";
+			};
+			
+
+			function Start(){
+			};
+		</script>
+	</head>
+	<body id="body" onload="Start();">
+		
+		<!--
+		<h1>i18x V1.0.0 Examples and Tests</h1>
+		<h2>Simple Tests</h2>
+		<div class="code">
+			<script>wr('document.write("This is a test.".i18xTrans());');</script>
+			<div class="result"><script>wrexec();</script></div>
+		</div>
+		
+		<h2>Format Tests</h2>
+		<div class="code">
+			<script>wr('\'<definition type="format" name="intdigit2" ifillchr="0" expression="=round(x)"><xa if="100|100+">...</xa><xa if="100-"><x if="0-">-</x><x if="0|0+"> </x><i1/><i0/></xa></definition>\'.i18xRegister();');</script>
+			<script>wr('document.write(\'This two digits value is <value format="intdigit2"/>.\'.i18xTrans({"value":20.00}));');</script>
+			<script>wr('document.write(\'This two digits value is <value format="intdigit2"/>.\'.i18xTrans({"value":4.6}));');</script>
+			<script>wr('document.write(\'This two digits value is <value format="intdigit2"/>.\'.i18xTrans({"value":104.6}));');</script>
+			<div class="result"><script>wrexec();</script></div>
+		</div>
+		
+		<h2>Expression Tests</h2>
+		<div class="code">
+			<script>wr('\'<definition type="expression" name="celsius2fahrenheit" expression="=x*1.8+32"/>\'.i18xRegister();');</script>
+			<script>wr('document.write(\'Today´s temperature is <temperature expression="=x*1.8+32"/>°F.\'.i18xTrans({"temperature":20.0}));');</script>
+			<script>wr('document.write(\'Today´s temperature is <temperature expression="=x * 1.8 + 32"/>°F.\'.i18xTrans({"temperature":20.0}));');</script>
+			<script>wr('document.write(\'Today´s temperature is <temperature expression="celsius2fahrenheit"/>°F.\'.i18xTrans({"temperature":20.0}));');</script>
+			<script>wr('document.write(\'Today´s temperature is <temperature/>°C.\'.i18xTrans({"temperature":20.0}));');</script>
+			<div class="result"><script>wrexec();</script></div>
+		</div>
+	
+	
+		
+		<h2>Parser Tests</h2>
+		<h2>Parser Tests</h2>
+		-->
+		<script>
+			'\
+			<definition name="roman" type="format" expression="=round(x)" ifillchr="⚪" digits="0=⚪|1=⚫">\
+				<r24/><r23/><r22><r21/><r20/><r19/><r18><r17/><r16/><r15><r14/><r13/><r12><r11/><r10/><r9/><r8/><r7/><r6/><r5/><r4/><r3/><r2/><r1/><r0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="roman"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="roman"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="roman"/>'.i18xTrans({"number":9})+"<br/>");
+
+			//document.write('Das ist ein Test <test1/> <test2 expression="123"/> <test2 expression="123"/>'.i18xTrans());
+			//document.write('<definition name="test" type="format" base="10" expression="=round(x*100)/100" chrrpl="=0|2=²|3=³"><v if="0-">-</v><i8/><i7/><i6/>.<i5/><i4/><i3/>.<i2/><i1/><i0/>Test</definition>'.i18xRegister());
+			//document.write('A Format Test: <day format="test"/>.'.i18xTrans({"day":-4}));
+			//document.write('<definition name="test2" type="format" base="2" expression="=round(x*100)/100" chrrpl="=0|2=²|3=³"><v if="1-|0-">-</v><i8/><i7/><i6/>.<i5/><i4/><i3/>.<i2/><i1/><i0/>Test</definition>'.i18xRegister());
+			//document.write('A Format Test: <day format="test2"/>.'.i18xTrans({"day":24}));
+			//document.write((24).toRomanString()+" - "+(2014).toRomanString());
+			/*
+			'\
+			<definition name="germandate" type="format">\
+				<definition name="fourdigits" type="format" ifillchr="0"><i3/><i2/><i1/><i0/></definition>\
+				<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\
+				<day format="twodigits"/>.<month expression="=x+1" format="twodigits"/>.<year format="fourdigits"/>\
+			</definition>'.i18xRegister();
+			document.write('<date format="germandate"/>'.i18xTrans({"date":new Date()}));
+			document.write("<br>");
+			
+			'\
+			<definition name="usdate" type="format">\
+				<definition name="fourdigits" type="format" digits="0=൦|1=൧|2=൨|3=൩|4=൪|5=൫|6=൬|7=൭|8=൮|9=൯"  "ifillchr="0"><i3/><i2/><i1/><i0/></definition>\
+				<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\
+				<year format="fourdigits"/>-<month enumeration="Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Dec"/>-<day format="twodigits"/>\
+			</definition>'.i18xRegister();
+			document.write('<date format="usdate"/>'.i18xTrans({"date":new Date()}));
+			document.write("<br>");
+			'\
+			<definition name="romandate" type="format">\
+				<definition name="fourdigits" type="format"><r5/><r4/><r3/><r2/><r1/><r0/></definition>\
+				<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\
+				<year format="fourdigits"/>-<month enumeration="Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Dec"/>-<day format="twodigits"/>\
+			</definition>'.i18xRegister();
+			document.write('<date format="romandate"/>'.i18xTrans({"date":new Date()}));
+			
+			'\
+			<definition name="kpiD2" type="format" ffillchr="0" expression="=round(x*100)/100" sense="ipeople kpi decimal number format D2">\
+				<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>,<f0/><f1/></xa>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="kpiD1" type="format" ffillchr="0" expression="=round(x*10)/10" sense="ipeople kpi decimal number format D1">\
+				<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>,<f0/></xa>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="kpiD0" type="format" expression="=round(x)" sense="ipeople kpi decimal number format D0">\
+				<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/></xa>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="kpiN2" type="format" ffillchr="0" expression="=round(x*100)/100" sense="ipeople kpi natural number format N2">\
+				<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>,<f0/><f1/></xa>\
+			</definition>'.i18xRegister(); // <xa if="1.8e307"></xa>
+			'\
+			<definition name="kpiN1" type="format" ffillchr="0" expression="=round(x*10)/10" sense="ipeople kpi natural number format N1">\
+				<x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>,<f0/>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="kpiN0" type="format" expression="=round(x)" sense="ipeople kpi natural number format N0">\
+				<x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="periodpickerdate" type="format" sense="month display of picker period">\
+				<definition name="fourdigits" type="format" "ifillchr="0"><i3/><i2/><i1/><i0/></definition>\
+				<month enumeration="January|February|March|April|May|June|July|August|September|October|November|December"/> <year format="fourdigits"/>\
+			</definition>'.i18xRegister();
+			'\
+			<definition name="stddate" type="format" sense="standard date display format">\
+				<definition name="fourdigits" type="format" ifillchr="0"><i3/><i2/><i1/><i0/></definition>\
+				<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\
+				<year format="fourdigits"/>-<month expression="=x+1" format="twodigits"/>-<day format="twodigits"/>\
+			</definition>'.i18xRegister();
+		
+			document.write(JSON.stringify(i18x.ParseFile(document.location.href,"en-US"),null,"\t").htmlEntities());
+			*/
+			document.write(
+			'\
+			Dear \
+			<age if="14|14+">\
+				<gendersalutation if="0">Mr.</gendersalutation> \
+				<gendersalutation if="1">Mrs.</gendersalutation> \
+				<gendersalutation if="2">Ms.</gendersalutation> \
+				<firstnames/> <lastname/> \
+			</age>\
+			<age if="14-">\
+				<firstnames/>\
+			</age>,\
+			welcome to our application!'.i18xTrans({"age":15,"gendersalutation":1,"firstnames":"Michael","lastname":"Template"})+"<br/>");
+			
+			var myMailSalutation='\
+				Dear \
+				<age if="14|14+">\
+					<gender if="1">Mr.</gender> \
+					<gender if="0">\
+						<married if="0">Ms.</married>\
+						<married if="1">Mrs.</married>\
+					</gender> \
+					<firstnames/> <lastname/>\
+				</age>\
+				<age if="14-">\
+					<firstnames/>\
+				</age>,<newline/>'.i18xRegister();
+
+				'\
+				<age if="14|14+">\
+					Sehr \
+					<gender if="0">geehrte Frau</gender>\
+					<gender if="1">geehrter Herr</gender> \
+					<firstnames/> <lastname/>\
+				</age>\
+				<age if="14-">\
+					<gender if="0">Liebe</gender>\
+					<gender if="1">Lieber</gender> \
+					<firstnames/>\
+				</age>,<newline/>'.i18xRegister("de",myMailSalutation);
+			
+			document.write(myMailSalutation.i18xTrans({"age":15,"married":1,"gender":1,"firstnames":"Michael","lastname":"Miller"})+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":5,"married":0,"gender":1,"firstnames":"John","lastname":"Smith"})+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":12,"married":0,"gender":0,"firstnames":"Tina","lastname":"Jonson"})+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":30,"married":1,"gender":0,"firstnames":"Jenny","lastname":"Taylor"})+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":30,"married":0,"gender":0,"firstnames":"Maria","lastname":"Temple"})+"<br/>");
+
+			document.write(myMailSalutation.i18xTrans({"age":15,"married":1,"gender":1,"firstnames":"Michael","lastname":"Miller"},"de")+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":5,"married":0,"gender":1,"firstnames":"John","lastname":"Smith"},"de")+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":12,"married":0,"gender":0,"firstnames":"Tina","lastname":"Jonson"},"de")+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":30,"married":1,"gender":0,"firstnames":"Jenny","lastname":"Taylor"},"de")+"<br/>");
+			document.write(myMailSalutation.i18xTrans({"age":30,"married":0,"gender":0,"firstnames":"Maria","lastname":"Temple"},"de")+"<br/>");
+			
+			'\
+			<definition name="filesize" type="format">\
+				<definition name="dec" type="format" ffillchr="0" expression="=round(x*100)/100">\
+					<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>,<f0/><f1/></xa>\
+				</definition>\
+				<definition name="int" type="format" expression="=round(x)">\
+					<xa if="1000000000|1000000000+">∞</xa><xa if="1000000000-"><x if="0-">-</x><i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/></xa>\
+				</definition>\
+				<xa if="1024|1024+">\
+					<xa if="1048576|1048576+">\
+						<xa if="1073741824|1073741824+">\
+							<x expression="=x/1073741824" format="dec"/> GB\
+						</xa>\
+						<xa if="1073741824-">\
+							<x expression="=x/1048576" format="dec"/> MB\
+						</xa>\
+					</xa>\
+					<xa if="1048576-">\
+						<x expression="=x/1024" format="dec"/> KB\
+					</xa>\
+				</xa>\
+				<xa if="1024-">\
+					<x format="int"/> Bytes\
+				</xa>\
+			</definition>'.i18xRegister();
+			
+			document.write('<noofbytes format="filesize"/>'.i18xTrans({"noofbytes":512})+"<br/>");
+			document.write('<noofbytes format="filesize"/>'.i18xTrans({"noofbytes":5698})+"<br/>");
+			document.write('<noofbytes format="filesize"/>'.i18xTrans({"noofbytes":1448576})+"<br/>");
+			document.write('<noofbytes format="filesize"/>'.i18xTrans({"noofbytes":1673741824})+"<br/>");
+			document.write('<noofbytes format="filesize"/>'.i18xTrans({"noofbytes":267374182467})+"<br/>");
+			
+			'\
+			<definition name="intnumber" type="format" expression="=round(x)">\
+				<i8/><i7/><i6/><xa if="100000|100000+">.</xa><i5/><i4/><i3/><xa if="1000|1000+">.</xa><i2/><i1/><i0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":9})+"<br/>");
+
+			'\
+			<definition name="intnumber" type="format" expression="=round(x)" digits="0=۰|1=۱|2=۲|3=۳|4=۴|5=۵|6=۶|7=۷|8=۸|9=۹">\
+				<i9/><i8/><i7/><i6/><i5/><i4/><i3/><i2/><i1/><i0/>\
+			</definition>'.i18xRegister("ur-PK");
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":65140},"ur-PK")+"<br/>");
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":2014},"ur-PK")+"<br/>");
+			document.write('<number format="intnumber"/>'.i18xTrans({"number":9},"ur-PK")+"<br/>");
+
+			'\
+			<definition name="dicenumber" type="format" expression="=round(x)" base="6" digits="0=⚬|1=⚀|2=⚁|3=⚂|4=⚃|5=⚄|6=⚅">\
+				<i9/><i8/><i7/><i6/><i5/><i4/><i3/><i2/><i1/><i0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="dicenumber"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="dicenumber"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="dicenumber"/>'.i18xTrans({"number":9})+"<br/>");
+			
+			'\
+			<definition name="binary" type="format" expression="=round(x)" base="2" ifillchr="⚪" digits="0=⚪|1=⚫">\
+				<i15/><i14/><i13/><i12/> <i11/><i10/><i9/><i8/> <i7/><i6/><i5/><i4/> <i3/><i2/><i1/><i0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="binary"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="binary"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="binary"/>'.i18xTrans({"number":9})+"<br/>");
+
+			'\
+			<definition name="roman" type="format" expression="=round(x)" base="2" ifillchr="⚪" digits="0=⚪|1=⚫">\
+				<r24/><r23/><r22><r21/><r20/><r19/><r18><r17/><r16/><r15><r14/><r13/><r12><r11/><r10/><r9/><r8/><r7/><r6/><r5/><r4/><r3/><r2/><r1/><r0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="roman"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="roman"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="roman"/>'.i18xTrans({"number":9})+"<br/>");
+
+			'\
+			<definition name="hex" type="format" expression="=round(x)" base="16" ifillchr="0" digits="a=A|b=B|c=C|d=D|e=E|f=F|>\
+				$<i3/><i2/><i1/><i0/>\
+			</definition>'.i18xRegister();
+			document.write('<number format="hex"/>'.i18xTrans({"number":65140})+"<br/>");
+			document.write('<number format="hex"/>'.i18xTrans({"number":2014})+"<br/>");
+			document.write('<number format="hex"/>'.i18xTrans({"number":9})+"<br/>");
+			
+			'\
+			<definition name="copyright" type="format">\
+				<r11/><r10/><r9/><r8/><r7/><r6/><r5/><r4/><r3/><r2/><r1/><r0/>\
+			</definition>'.i18xRegister();
+			document.write('© <year format="copyright"/> by everybody Inc.'.i18xTrans({"year":2014})+"<br/>");
+			document.write('© <year format="copyright"/> by everybody Inc.'.i18xTrans({"year":1998})+"<br/>");
+			document.write('© <year format="copyright"/> by everybody Inc.'.i18xTrans({"year":1970})+"<br/>");
+			
+			document.write('Today´s temperature is <temperature expression="=x*1.8+32"/>°F.'.i18xTrans({"temperature":20})+"<br/>");
+						
+		</script>
+		
+	</body>
+</html>

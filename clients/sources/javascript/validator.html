@@ -1,0 +1,976 @@
+<html dir="ltr">
+	<!--
+	// i18x Validator
+	// A web app to validate i18x format strings.
+	// © 1995-2014 Dongleware Verlags GmbH
+	// Permission is hereby granted, free of charge, to any person obtaining a copy
+	// of this software and associated documentation files (the "Software"), to deal
+	// in the Software without restriction, including without limitation the rights
+	// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	// copies of the Software, and to permit persons to whom the Software is
+	// furnished to do so, subject to the following conditions:
+	// 
+	// The above copyright notice and this permission notice shall be included in
+	// all copies or substantial portions of the Software.
+	// 
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	// THE SOFTWARE.
+	-->
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<meta http-equiv="MSThemeCompatible" content="No">
+		<meta content="notranslate" name="google">
+		<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+		<meta HTTP-EQUIV="expires" CONTENT="0">
+		<meta NAME="robots" CONTENT="index,follow">
+		<meta HTTP-EQUIV="Cache-Control" content="no-cache">
+		<meta HTTP-EQUIV="Cache-Control" content="must-revalidate">
+		<meta HTTP-EQUIV="Cache-Control" content="proxy-revalidate">
+		<meta HTTP-EQUIV="Cache-Control" content="max-age=0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<style>
+			@font-face{
+				font-family:"Symbola";
+				src:url(SymbolaFull.ttf);
+			}
+			::-webkit-scrollbar{
+				width:8px;
+			}
+			::-webkit-scrollbar-track{
+				border-radius:10px;
+				-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.2);
+			}
+			::-webkit-scrollbar-thumb{
+				border-radius:10px;
+				background-color:rgba(255,255,255,0.5);
+				-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.3);
+			}
+			::selection{
+				background-color:#808080;
+				color:#ffffff;
+			}
+			::-ms-selection{
+				background-color:#808080;
+				color:#ffffff;
+			}
+			::-moz-selection{
+				background-color:#808080;
+				color:#ffffff;
+			}
+			::-webkit-selection{
+				background-color:#808080;
+				color:#ffffff;
+			}			
+			body{
+				font-family:'Arial';
+				background-image:url(bgrd.png);
+			}
+			a{
+			}
+			a:link{
+				color:#808080;
+				text-decoration:none;
+				border-bottom:1px #808080 dotted;
+			}
+			a:visited{
+				color:#808080;
+				text-decoration:none;
+				border-bottom:1px #808080 dotted;
+			}
+			a:hover{
+				color:#808080;
+				text-decoration:none;
+				border-bottom:1px #808080 dotted;
+			}
+			a:active{
+				color:#808080;
+				text-decoration:none;
+				border-bottom:1px #808080 dotted;
+			}			
+			h1{
+				margin-top:-8px;
+				margin-bottom:-2px;
+			}
+			h1>div.logo{
+				display:inline-block;
+				position:relative;
+				top:5px;
+				background-image:url(logo.png);
+				width:47px;
+				height:38px;
+				opacity:0.6;
+			}
+			h1>div.title{
+				display:inline-block;
+				font-size:38px;
+				color:#000000;
+				padding-left:8px;
+			}
+			h2{
+				font-size:12px;
+				font-weight:600;
+				color:#000000;
+				margin-top:4px;
+				margin-bottom:-2px;
+			}
+			div.subtitle{
+				font-size:12px;
+			}
+			div.categories{
+				display:inline-block;
+				padding-top:4px;
+			}
+			textarea{
+				font-size:12px;
+				font-family:"Courier New",Courier,monospace;
+				padding:4px;
+				-ms-tab-size:2;
+				-moz-tab-size:2;
+				-o-tab-size:2;
+				tab-size:2;
+				border:1px solid #000000;
+				border-radius:3px;
+				box-shadow:inset 0 0 10px #404040;
+				-ms-box-shadow:inset 0 0 10px #404040;
+				-moz-box-shadow:inset 0 0 10px #404040;
+				-webkit-box-shadow:inset 0 0 10px #404040;
+			}
+			textarea.textphrase.plain{
+				width:100%;
+			}
+			textarea.textphrase.json{
+				width:100%;
+			}
+			textarea.placeholder{
+				width:calc(100% - 100px);
+				width:-ms-calc(100% - 100px);
+				width:-moz-calc(100% - 100px);
+				width:-webkit-calc(100% - 100px);
+			}
+			textarea.resultplain{
+				font-family:'Arial';
+				font-size:20px;
+				width:100%;
+			}
+			div.resulthtml{
+				font-family:'Symbola';
+				font-size:24px;
+				font-weight:400;
+				padding:4px;
+				min-height:40px;
+				border:1px solid #000000;
+				border-radius:3px;
+				background-color:#E0E0E0;
+				box-shadow:inset 0 0 10px #404040;
+				-ms-box-shadow:inset 0 0 10px #404040;
+				-moz-box-shadow:inset 0 0 10px #404040;
+				-webkit-box-shadow:inset 0 0 10px #404040;
+			}
+			center.footer{
+				width:100%;
+				font-size:8px;
+			}
+		</style>
+		<script charset="utf-8" src="./lib.js"></script>
+		<script charset="utf-8" src="./i18x.js"></script>
+		<script>
+			var APPID="i18xValidator";
+			var Examples=new Array();
+			var Categories=new Object();
+			
+			function Example(_category,_title,_textphrase,_placeholders){
+				this.category=_category;
+				this.title=_title;
+				this.textphrase=_textphrase
+				this.placeholders=_placeholders
+				if(!Categories[_category])Categories[_category]=new Array();
+				Categories[_category].push(this);
+				Examples.push(this);
+			};
+
+
+			function DefExamples(){
+
+				// =================================
+				// SIMPLE TEXT PHRASES
+				// =================================
+				new Example("Simple Text Phrases","Hello World (English-US)",'\
+				Hello World! Hello <firstnames/> <lastname/>!',
+				[{"firstnames":"Michael","lastname":"Miller"},
+					{"firstnames":"John","lastname":"Smith"},
+					{"firstnames":"Tina","lastname":"Jonson"},
+					{"firstnames":"Jenny","lastname":"Taylor"},
+					{"firstnames":"Maria","lastname":"Temple"}]
+				);
+
+				new Example("Simple Text Phrases","Hello World (German-DE)",'\
+				Hallo World! Hallo <firstnames/> <lastname/>!',
+				[{"firstnames":"Michael","lastname":"Miller"},
+					{"firstnames":"John","lastname":"Smith"},
+					{"firstnames":"Tina","lastname":"Jonson"},
+					{"firstnames":"Jenny","lastname":"Taylor"},
+					{"firstnames":"Maria","lastname":"Temple"}]
+				);
+
+				new Example("Simple Text Phrases","Atom Enumeration (English-US)",'\
+				The element <noofatoms enumeration="|Hydrogen|Helium|Lithium|Beryllium|Boron|Carbon"/> has <noofatoms/> atom<noofatoms if="1+">s</noofatoms>.',
+				[{"noofatoms":1},
+					{"noofatoms":2},
+					{"noofatoms":3},
+					{"noofatoms":5},
+					{"noofatoms":6}]
+				);
+
+				new Example("Simple Text Phrases","Atom Enumeration (German-DE)",'\
+				Das Element <noofatoms enumeration="|Wasserstoff|Helium|Lithium|Beryllium|Bor|Kohlenstoff"/> besteht aus <noofatoms/> Atom<noofatoms if="1+">en</noofatoms>.',
+				[{"noofatoms":1},
+					{"noofatoms":2},
+					{"noofatoms":3},
+					{"noofatoms":5},
+					{"noofatoms":6}]
+				);
+
+				new Example("Simple Text Phrases","Number of Results (English-US)",'\
+				<noofresults if="0">No results available.</noofresults>\n\
+				<noofresults if="1">One result available.</noofresults>\n\
+				<noofresults if="1+"><noofresults/> results available.</noofresults>',
+				[{"noofresults":0},
+					{"noofresults":1},
+					{"noofresults":2},
+					{"noofresults":3},
+					{"noofresults":10}]
+				);
+
+				new Example("Simple Text Phrases","Number of Results (German-DE)",'\
+				<noofresults if="0">Keine Ergebnisse verfügbar.</noofresults>\n\
+				<noofresults if="1">Ein Ergebnis verfügbar.</noofresults>\n\
+				<noofresults if="1+"><noofresults/> Ergebnisse verfügbar.</noofresults>',
+				[{"noofresults":0},
+					{"noofresults":1},
+					{"noofresults":2},
+					{"noofresults":3},
+					{"noofresults":10}]
+				);
+
+				new Example("Simple Text Phrases","42 less than 2014",'\
+				42 <lt/> 2014 and 42 <gt/> 1',
+				[{},
+					{},
+					{},
+					{},
+					{}]
+				);
+
+				new Example("Simple Text Phrases","Sense Attibute",'\
+				<title sense="title of the operation system"/>',
+				[{"title":"Mac OS"},
+					{"title":"Windows 7"},
+					{"title":"Linux"},
+					{"title":"iOS"},
+					{"title":"Android"}]
+				);
+
+				new Example("Simple Text Phrases","Info Tag",'\
+				<info sense="title of the operation system"/><title/>',
+				[{"title":"Mac OS"},
+					{"title":"Windows 7"},
+					{"title":"Linux"},
+					{"title":"iOS"},
+					{"title":"Android"}]
+				);
+
+				new Example("Simple Text Phrases","Special Character Definitions",'\
+				<definition name="testsingle" type="format"><lt/><gt/><br/><newline/><slashnewline/><quote/><singlequote/><space/><amp/><nbsp/><tab/></definition>\n\
+				<definition name="testrepeat" type="format"><lt repeat="3"/><gt repeat="3"/><br repeat="3"/><newline repeat="3"/><slashnewline repeat="3"/><quote repeat="3"/><singlequote repeat="3"/><space repeat="3"/><amp repeat="3"/><nbsp repeat="3"/><tab repeat="3"/></definition>\n\
+				<test format="testsingle"/>\n\
+				<test format="testrepeat"/>',
+				[{},
+					{},
+					{},
+					{},
+					{}]
+				);
+
+
+				new Example("Complex Placeholder Text Phrases","Salutation by Age and Gender (English-US)",'\
+				Dear \n\
+				<age if="14|14+">\n\
+					<gender if="1">Mr. </gender>\n\
+					<gender if="0">\n\
+						<married if="0">Ms. </married>\n\
+						<married if="1">Mrs. </married>\n\
+					</gender>\n\
+					<firstnames/> <lastname/>\n\
+				</age>\n\
+				<age if="14-">\n\
+					<firstnames/>\n\
+				</age>,<newline/>',
+				[{"age":15,"married":1,"gender":1,"firstnames":"Michael","lastname":"Miller"},
+					{"age":5,"married":0,"gender":1,"firstnames":"John","lastname":"Smith"},
+					{"age":12,"married":0,"gender":0,"firstnames":"Tina","lastname":"Jonson"},
+					{"age":30,"married":1,"gender":0,"firstnames":"Jenny","lastname":"Taylor"},
+				{"age":30,"married":0,"gender":0,"firstnames":"Maria","lastname":"Temple"}]
+				);
+				
+				new Example("Complex Placeholder Text Phrases","Salutation by Age and Gender (German-DE)",'\
+				<age if="14|14+">\n\
+					Sehr \n\
+					<gender if="0">geehrte Frau</gender>\n\
+					<gender if="1">geehrter Herr</gender> \n\
+					<firstnames/> <lastname/>\n\
+				</age>\n\
+				<age if="14-">\n\
+					<gender if="0">Liebe</gender>\n\
+					<gender if="1">Lieber</gender> \n\
+					<firstnames/>\n\
+				</age>,<newline/>',
+				[{"age":15,"married":1,"gender":1,"firstnames":"Michael","lastname":"Miller"},
+					{"age":5,"married":0,"gender":1,"firstnames":"John","lastname":"Smith"},
+					{"age":12,"married":0,"gender":0,"firstnames":"Tina","lastname":"Jonson"},
+					{"age":30,"married":1,"gender":0,"firstnames":"Jenny","lastname":"Taylor"},
+				{"age":30,"married":0,"gender":0,"firstnames":"Maria","lastname":"Temple"}]
+				);
+				
+				new Example("Number Formats","Number Decimal with 2 Fix Point Digits (English-US)",'\
+				<definition name="usnumberdecfix2" type="format" ffillchr="0" expression="=round(x*100)/100">\n\
+					<xa if="1000000000|1000000000+">∞</xa>\n\
+					<xa if="1000000000-">\n\
+						<x if="0-">-</x>\n\
+						<i8/><i7/><i6/>\n\
+						<xa if="100000|100000+">.</xa>\n\
+						<i5/><i4/><i3/>\n\
+						<xa if="1000|1000+">.</xa>\n\
+						<i2/><i1/><i0/>,<f0/><f1/>\n\
+					</xa>\n\
+				</definition>\n\
+				<number format="usnumberdecfix2"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Number Decimal with 2 Fix Point Digits (German-DE)",'\
+				<definition name="denumberdecfix2" type="format" ffillchr="0" expression="=round(x*100)/100">\n\
+					<xa if="1000000000|1000000000+">∞</xa>\n\
+					<xa if="1000000000-">\n\
+						<x if="0-">-</x>\n\
+						<i8/><i7/><i6/>\n\
+						<xa if="100000|100000+">,</xa>\n\
+						<i5/><i4/><i3/>\n\
+						<xa if="1000|1000+">,</xa>\n\
+						<i2/><i1/><i0/>.<f0/><f1/>\n\
+					</xa>\n\
+				</definition>\n\
+				<number format="denumberdecfix2"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Pakistani (ur-PK) Integer Number",'\
+				<definition dir="rtl"/>\n\
+				<definition name="urPKintnumber" type="format" expression="=round(x)" digits="0=۰|1=۱|2=۲|3=۳|4=۴|5=۵|6=۶|7=۷|8=۸|9=۹">\n\
+					<i9/><i8/><i7/><i6/><i5/><i4/><i3/><i2/><i1/><i0/>\n\
+				</definition>\n\
+				<number format="urPKintnumber"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Binary 16 Bit Number",'\
+				<definition name="binarynumber16" type="format" expression="=round(x)" base="2" ifillchr="⚪" digits="0=⚪|1=⚫">\n\
+					<i15/><i14/><i13/><i12/> <i11/><i10/><i9/><i8/> <i7/><i6/><i5/><i4/> <i3/><i2/><i1/><i0/>\n\
+				</definition>\n\
+				<number format="binarynumber16"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Hexadecimal 16 Bit Number",'\
+				<definition name="hexnumber16" type="format" expression="=round(x)" base="16" ifillchr="0" digits="a=A|b=B|c=C|d=D|e=E|f=F|>\n\
+					$<i3/><i2/><i1/><i0/>\n\
+				</definition>\n\
+				<number format="hexnumber16"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Roman Number",'\
+				<definition name="romannumber" type="format" expression="=round(x)">\n\
+					<r24/><r23/><r22><r21/><r20/><r19/><r18><r17/><r16/><r15><r14/><r13/><r12><r11/><r10/><r9/><r8/><r7/><r6/><r5/><r4/><r3/><r2/><r1/><r0/>\n\
+				</definition>\n\
+				<number format="romannumber"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Dice Number Post Value Notation",'\
+				<definition name="dicenumber" type="format" expression="=round(x)" base="6" digits="0=-|1=⚀|2=⚁|3=⚂|4=⚃|5=⚄|6=⚅">\n\
+					<i9/><i8/><i7/><i6/><i5/><i4/><i3/><i2/><i1/><i0/>\n\
+				</definition>\n\
+				<number format="dicenumber"/>',
+				[{"number":65140},
+					{"number":2014},
+					{"number":9},
+					{"number":-100},
+					{"number":123456789.123456}]
+				);
+				
+				new Example("Number Formats","Percent",'\
+				<definition name="percent" type="format" expression="=round(x*100)" sense="value between 0.0 and 1.0">\n\
+					<i2/><i1/><i0/>%\n\
+				</definition>\n\
+				<number format="percent"/>',
+				[{"number":0},
+					{"number":0.6},
+					{"number":1},
+					{"number":0.8},
+					{"number":0.3}]
+				);
+				
+				new Example("Number Formats","Promille",'\
+				<definition name="percent" type="format" expression="=round(x*1000)" sense="value between 0.0 and 1.0">\n\
+					<i3/><i2/><i1/><i0/>‰\n\
+				</definition>\n\
+				<number format="percent"/>',
+				[{"number":0},
+					{"number":0.6},
+					{"number":1},
+					{"number":0.8},
+					{"number":0.3}]
+				);
+
+				new Example("Number Formats","Score (English-US)",'\
+				User´s score: <score expression="=round(x*5)" enumeration="☆☆☆☆☆|☆☆☆☆★|☆☆☆★★|☆☆★★★|☆★★★★|★★★★★" sense="number of stars as percent value between 0.0 and 1.0"/>',
+				[{"score":0},
+					{"score":0.6},
+					{"score":1},
+					{"score":0.8},
+					{"score":0.3}]
+				);
+				
+				new Example("Unit Formats","Number of Bytes (Englsih-US)",'\
+				<definition name="bytesize" type="format">\n\
+					<definition name="dec" type="format" ffillchr="0" expression="=round(x*100)/100">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">,</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">,</xa>\n\
+							<i2/><i1/><i0/>.<f0/><f1/>\n\
+						</xa>\n\
+					</definition>\n\
+					<definition name="int" type="format" expression="=round(x)">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">,</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">,</xa>\n\
+							<i2/><i1/><i0/>\n\
+						</xa>\n\
+					</definition>\n\
+					<xa if="1024|1024+">\n\
+						<xa if="1048576|1048576+">\n\
+							<xa if="1073741824|1073741824+">\n\
+								<x expression="=x/1073741824" format="dec"/> GB\n\
+							</xa>\n\
+							<xa if="1073741824-">\n\
+								<x expression="=x/1048576" format="dec"/> MB\n\
+							</xa>\n\
+						</xa>\n\
+						<xa if="1048576-">\n\
+							<x expression="=x/1024" format="dec"/> KB\n\
+						</xa>\n\
+					</xa>\n\
+					<xa if="1024-">\n\
+						<x format="int"/> Bytes\n\
+					</xa>\n\
+				</definition>\n\
+				<filesize format="bytesize"/>',
+				[{"filesize":523},
+					{"filesize":5698},
+					{"filesize":1448576},
+					{"filesize":1673741824},
+					{"filesize":267374698182467}]
+				);
+				
+				new Example("Unit Formats","Number of Bytes (German-DE)",'\
+				<definition name="bytesize" type="format">\n\
+					<definition name="dec" type="format" ffillchr="0" expression="=round(x*100)/100">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">.</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">.</xa>\n\
+							<i2/><i1/><i0/>,<f0/><f1/>\n\
+						</xa>\n\
+					</definition>\n\
+					<definition name="int" type="format" expression="=round(x)">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">.</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">.</xa>\n\
+							<i2/><i1/><i0/>\n\
+						</xa>\n\
+					</definition>\n\
+					<xa if="1024|1024+">\n\
+						<xa if="1048576|1048576+">\n\
+							<xa if="1073741824|1073741824+">\n\
+								<x expression="=x/1073741824" format="dec"/> GB\n\
+							</xa>\n\
+							<xa if="1073741824-">\n\
+								<x expression="=x/1048576" format="dec"/> MB\n\
+							</xa>\n\
+						</xa>\n\
+						<xa if="1048576-">\n\
+							<x expression="=x/1024" format="dec"/> KB\n\
+						</xa>\n\
+					</xa>\n\
+					<xa if="1024-">\n\
+						<x format="int"/> Bytes\n\
+					</xa>\n\
+				</definition>\n\
+				<filesize format="bytesize"/>',
+				[{"filesize":523},
+					{"filesize":5698},
+					{"filesize":1448576},
+					{"filesize":1673741824},
+					{"filesize":267374698182467}]
+				);
+				
+				
+				new Example("Unit Formats","Number of Bytes (ISO, German-DE)",'\
+				<definition name="bytesize" type="format">\n\
+					<definition name="dec" type="format" ffillchr="0" expression="=round(x*100)/100">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">.</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">.</xa>\n\
+							<i2/><i1/><i0/>,<f0/><f1/>\n\
+						</xa>\n\
+					</definition>\n\
+					<definition name="int" type="format" expression="=round(x)">\n\
+						<xa if="1000000000|1000000000+">∞</xa>\n\
+						<xa if="1000000000-">\n\
+							<x if="0-">-</x>\n\
+							<i8/><i7/><i6/>\n\
+							<xa if="1000000|1000000+">.</xa>\n\
+							<i5/><i4/><i3/>\n\
+							<xa if="1000|1000+">.</xa>\n\
+							<i2/><i1/><i0/>\n\
+						</xa>\n\
+					</definition>\n\
+					<xa if="1000|1000+">\n\
+						<xa if="1000000|1000000+">\n\
+							<xa if="1000000000|1000000000+">\n\
+								<x expression="=x/1000000000" format="dec"/> OGB\n\
+							</xa>\n\
+							<xa if="1000000000-">\n\
+								<x expression="=x/1000000" format="dec"/> OMB\n\
+							</xa>\n\
+						</xa>\n\
+						<xa if="1000000-">\n\
+							<x expression="=x/1000" format="dec"/> OKB\n\
+						</xa>\n\
+					</xa>\n\
+					<xa if="1000-">\n\
+						<x format="int"/> Bytes\n\
+					</xa>\n\
+				</definition>\n\
+				<filesize format="bytesize"/>',
+				[{"filesize":523},
+					{"filesize":5698},
+					{"filesize":1448576},
+					{"filesize":1673741824},
+					{"filesize":267374698182467}]
+				);
+
+
+				new Example("Unit Conversion Formats","Temperature (English-US)",'\
+				Today´s temperature is <temperature expression="=round((x*1.8+32)*100)/100"/>°F.',
+				[{"temperature":-50},
+					{"temperature":-10},
+					{"temperature":20},
+					{"temperature":20.5},
+					{"temperature":0}]
+				);
+				
+				new Example("Unit Conversion Formats","Temperature (German-DE)",'\
+				Die heutige Temperatur beträgt <temperature/>°C.',
+				[{"temperature":-50},
+					{"temperature":-10},
+					{"temperature":20},
+					{"temperature":20.5},
+					{"temperature":0}]
+				);
+				
+				new Example("Unit Conversion Formats","Temperature by Expression Definition (English-US)",'\
+				<definition name="celsius2Fahrenheit" type="expression" expression="=round((x*1.8+32)*100)/100"/>\n\
+				Today´s temperature is <temperature expression="celsius2Fahrenheit"/>°F.',
+				[{"temperature":-50},
+					{"temperature":-10},
+					{"temperature":20},
+					{"temperature":20.5},
+					{"temperature":0}]
+				);
+				
+				new Example("Unit Conversion Formats","Temperature by Format Definition (English-US)",'\
+				<definition name="temperature" type="format" expression="=round((x*1.8+32)*100)/100">\n\
+					<x if="0-">-</x><i2/><i1/><i0/><x expression="=abs(x)-floor(abs(x))" if="0+">.</x><f0/><f1/>°F\n\
+				</definition>\n\
+				Today´s temperature is <temperature format="temperature"/>.',
+				[{"temperature":-50},
+					{"temperature":-10},
+					{"temperature":20},
+					{"temperature":20.5},
+					{"temperature":0}]
+				);
+				
+				new Example("Unit Conversion Formats","Temperature by Format Definition (German-DE)",'\
+				<definition name="temperature" type="format">\n\
+					<x if="0-">-</x><i2/><i1/><i0/><x expression="=abs(x)-floor(abs(x))" if="0+">,</x><f0/><f1/>°C\n\
+				</definition>\n\
+				Die heutige Temperatur beträgt <temperature format="temperature"/>.',
+				[{"temperature":-50},
+					{"temperature":-10},
+					{"temperature":20},
+					{"temperature":20.5},
+					{"temperature":0}]
+				);
+			
+				// =================================
+				// CALENDAR FORMATS
+				// =================================
+				new Example("Calendar Formats","Simple Date (English-US)",'\
+				<definition name="stddate" type="format">\n\
+					<definition name="fourdigits" type="format" ifillchr="0"><i3/><i2/><i1/><i0/></definition>\n\
+					<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\n\
+					<month expression="=x+1" format="twodigits"/>-<day format="twodigits"/>-<year format="fourdigits"/>\n\
+				</definition>\n\
+				<secondssince1970 format="stddate"/>',
+				[{"secondssince1970":new Date().getTime()/1000,"plaindatestring":new Date()},
+					{"secondssince1970":new Date(1998,7,3,12,33,44).getTime()/1000,"plaindatestring":new Date(1998,7,3,12,33,44)},
+					{"secondssince1970":new Date(2089,12,31,9,45,0).getTime()/1000,"plaindatestring":new Date(2089,12,31,9,45,0)},
+					{"secondssince1970":new Date(2003,8,2,23,45,15).getTime()/1000,"plaindatestring":new Date(2003,8,1,23,45,15)},
+					{"secondssince1970":new Date(-150,4,1,12,33,14).getTime()/1000,"plaindatestring":new Date(-150,4,1,12,0,0)}]
+				);
+				
+				new Example("Calendar Formats","Simple Date (German-DE)",'\
+				<definition name="stddate" type="format">\n\
+					<definition name="fourdigits" type="format" ifillchr="0"><i3/><i2/><i1/><i0/></definition>\n\
+					<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\n\
+					<day format="twodigits"/>.<month expression="=x+1" format="twodigits"/>.<year format="fourdigits"/>\n\
+				</definition>\n\
+				<secondssince1970 format="stddate"/>',
+				[{"secondssince1970":new Date().getTime()/1000,"plaindatestring":new Date()},
+					{"secondssince1970":new Date(1998,7,3,12,33,44).getTime()/1000,"plaindatestring":new Date(1998,7,3,12,33,44)},
+					{"secondssince1970":new Date(2089,12,31,9,45,0).getTime()/1000,"plaindatestring":new Date(2089,12,31,9,45,0)},
+					{"secondssince1970":new Date(2003,8,2,23,45,15).getTime()/1000,"plaindatestring":new Date(2003,8,1,23,45,15)},
+					{"secondssince1970":new Date(-150,4,1,12,33,14).getTime()/1000,"plaindatestring":new Date(-150,4,1,12,0,0)}]
+				);
+				
+				new Example("Calendar Formats","Long Date and Time (English-DE)",'\
+				<definition name="longdatetime" type="format">\n\
+					<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\n\
+					<weekday enumeration="Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"/>,<space/>\n\
+					<day if="4-"><day/><day enumeration="|st|nd|rd"/></day><day if="4|4+"><day/>th </day> <month enumeration="January|February|March|April|May|June|July|August|September|October|November|December"/> <year expression="=abs(x)"/><year if="0-"> B.C.</year>,\n\
+					<space/><hour expression="=x%12" format="twodigits"/>:<minute format="twodigits"/>:<second format="twodigits"/> <hour expression="=ceil(x/12)" enumeration="|am|pm"/>\n\
+				</definition>\n\
+				<secondssince1970 format="longdatetime"/>',
+				[{"secondssince1970":new Date().getTime()/1000,"plaindatestring":new Date()},
+					{"secondssince1970":new Date(1998,7,3,12,33,44).getTime()/1000,"plaindatestring":new Date(1998,7,3,12,33,44)},
+					{"secondssince1970":new Date(2089,12,31,9,45,0).getTime()/1000,"plaindatestring":new Date(2089,12,31,9,45,0)},
+					{"secondssince1970":new Date(2003,8,2,23,45,15).getTime()/1000,"plaindatestring":new Date(2003,8,1,23,45,15)},
+					{"secondssince1970":new Date(-150,4,1,12,33,14).getTime()/1000,"plaindatestring":new Date(-150,4,1,12,0,0)}]
+				);
+				
+				new Example("Calendar Formats","Long Date and Time (German-DE)",'\
+				<definition name="longdatetime" type="format">\n\
+					<definition name="twodigits" type="format" ifillchr="0"><i1/><i0/></definition>\n\
+					<weekday enumeration="Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag"/>,<space/>\n\
+					<day/>. <month enumeration="Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember"/> <year expression="=abs(x)"/><year if="0-"> v.Chr.</year>,\n\
+					<space/><hour format="twodigits"/>:<minute format="twodigits"/>:<second format="twodigits"/> Uhr\n\
+				</definition>\n\
+				<secondssince1970 format="longdatetime"/>',
+				[{"secondssince1970":new Date().getTime()/1000,"plaindatestring":new Date()},
+					{"secondssince1970":new Date(1998,7,3,12,33,44).getTime()/1000,"plaindatestring":new Date(1998,7,3,12,33,44)},
+					{"secondssince1970":new Date(2089,12,31,9,45,0).getTime()/1000,"plaindatestring":new Date(2089,12,31,9,45,0)},
+					{"secondssince1970":new Date(2003,8,2,23,45,15).getTime()/1000,"plaindatestring":new Date(2003,8,1,23,45,15)},
+					{"secondssince1970":new Date(-150,4,1,12,33,14).getTime()/1000,"plaindatestring":new Date(-150,4,1,12,0,0)}]
+				);
+				
+				new Example("Calendar Formats","UTF-8 Clock Face Characters",'\
+				<definition name="hour" type="format">\n\
+					<hour expression="=x%12" enumeration="🕛|🕐|🕑|🕒|🕓|🕔|🕕|🕖|🕗|🕘|🕙|🕚"/>\n\
+				</definition>\n\
+				<secondssince1970 format="hour"/>',
+				[{"secondssince1970":new Date().getTime()/1000,"plaindatestring":new Date()},
+					{"secondssince1970":new Date(1998,7,3,12,33,44).getTime()/1000,"plaindatestring":new Date(1998,7,3,12,33,44)},
+					{"secondssince1970":new Date(2089,12,31,9,45,0).getTime()/1000,"plaindatestring":new Date(2089,12,31,9,45,0)},
+					{"secondssince1970":new Date(2003,8,2,23,45,15).getTime()/1000,"plaindatestring":new Date(2003,8,1,23,45,15)},
+					{"secondssince1970":new Date(-150,4,1,12,33,14).getTime()/1000,"plaindatestring":new Date(-150,4,1,12,0,0)}]
+				);
+				
+				
+				
+			};
+			
+			function ShowHTMLResult(){
+				document.getElementById("resultplainbox").style.display="none";
+				document.getElementById("resulthtmlbox").style.display="block";
+			};
+			function ShowPlainTextResult(){
+				document.getElementById("resultplainbox").style.display="block";
+				document.getElementById("resulthtmlbox").style.display="none";
+			};
+			function ShowJSONTextPhrase(){
+			var t,o;
+				try{
+					t=[document.getElementById("textphraseplain").value.leftAlign().trim()];
+					o=JSON.stringify(t);
+					document.getElementById("textphrasejson").value=o.substr(1,o.length-2);
+					document.getElementById("textphaseplainbox").style.display="none";
+					document.getElementById("textphasejsonbox").style.display="block";
+				}catch(err){
+					alert("Error in text phrase.");
+				};
+			};
+			function ShowPlainTextPhrase(){
+			var t,o;
+				try{
+					t=document.getElementById("textphrasejson").value;
+					o=JSON.parse("["+t+"]");
+					console.log(o);
+					document.getElementById("textphraseplain").value=o[0].leftAlign().trim();
+					document.getElementById("textphaseplainbox").style.display="block";
+					document.getElementById("textphasejsonbox").style.display="none";
+				}catch(err){
+					alert("Error in JSON format:"+err.toString());
+				};
+			};
+			
+			function Translate(_no){
+			var t="",p={},err,ok=true,res="";
+				i18x.Reset();
+				document.getElementById("resultplain").value="";
+				document.getElementById("resulthtml").innerHTML="";
+				
+				t=document.getElementById("textphraseplain").value
+				try{
+					p=JSON.parse(document.getElementById("placeholders"+_no).value);
+				}catch(err){
+					ok=false;
+					document.getElementById("resultplain").value="Error in placeholder JSON: "+err.toString();
+					document.getElementById("resulthtml").innerHTML="";
+				};
+				if(ok){
+					try{
+						res=i18x.Trans(t,p);
+						document.getElementById("resultplain").value=res;
+						document.getElementById("resulthtml").innerHTML=res;
+					}catch(err){
+						ok=false;
+						document.getElementById("resultplain").value="Error in text phrase: "+err.toString();
+						document.getElementById("resulthtml").innerHTML="";
+					};
+				};
+			};
+			
+			function ChangeCategory(_cat){
+			var cn=0,cn;
+				console.log(_cat);
+				for(c in Categories){
+					document.getElementById("exampleselect_"+cn).style.display=(_cat==cn)?"inline":"none";
+					cn++;
+				};
+				SetCookie("i18xCategory",_cat);
+				SetCookie("i18xExample",0);
+				ChangeExample(_cat,0);
+			};
+			
+			function ChangeExample(_cat,_no){
+			var c,cn=0,cat="",i,e=Examples[_no];
+				SetCookie("i18xCategory",_cat,0);
+				SetCookie("i18xExample",_no,0);
+				for(c in Categories){
+					document.getElementById("exampleselect_"+cn).style.display=((_cat==cn)?"inline":"none");
+					if(_cat==cn)cat=c;
+					cn++;
+				};
+				
+				//console.log(cat+"#"+_no);
+				if(typeof(Categories[cat])=="undefined")return;
+				if(typeof(Categories[cat][_no])=="undefined")return;
+				
+				for(i=0;i<5;i++)document.getElementById("placeholders"+i).value="";
+				document.getElementById("textphraseplain").value=Categories[cat][_no].textphrase.leftAlign().trim();
+				document.getElementById("textphaseplainbox").style.display="block";
+				document.getElementById("textphasejsonbox").style.display="none";
+				for(i=0;i<5;i++){
+					if(Examples[_no].placeholders[i]){
+						document.getElementById("placeholders"+i).value=JSON.stringify(Categories[cat][_no].placeholders[i]);
+					}else{
+						document.getElementById("placeholders"+i).value="{}";
+					};
+				};
+				document.getElementById("resultplain").value="";
+				document.getElementById("resulthtml").innerHTML="";
+				Translate(0);
+			};
+			
+			function CreateCategoriesSelect(){
+			var h="",cn=0,l,i,c,cc=GetCookie("i18xCategory",0),ce=GetCookie("i18xExample",0);
+				h+='Category: <select id="categorieselect" onchange="ChangeCategory(this.value);">';
+				for(c in Categories){
+					h+='<option value="'+cn+'" '+((cc==cn)?'selected':'')+'>'+c.htmlEntities()+'</option>';
+					cn++;
+				};
+				h+='</select> Example: ';
+				cn=0;
+				//console.log(cc+"/"+ce);
+				for(c in Categories){
+					l=Categories[c].length;
+					//console.log(cc+"-"+cn);
+					h+='<select id="exampleselect_'+cn+'" style="display:'+((cc==cn)?'inline':'none')+'" onchange="ChangeExample('+cn+',this.value);">';
+					for(i=0;i<l;i++){
+						h+='<option value="'+i+'" '+((cc==cn&&ce==i)?'selected':'')+'>'+Categories[c][i].title.htmlEntities()+'</option>';
+					};
+					h+='</select>';
+					cn++;
+				};
+				document.getElementById("categories").innerHTML=h;
+			};
+			
+			function StartUp(){
+			var cc=GetCookie("i18xCategory",0),ce=GetCookie("i18xExample",0);
+				ShowHTMLResult();
+				DefExamples();
+				CreateCategoriesSelect();
+				ChangeExample(cc,ce);
+				//document.getElementById("resulthtml").innerHTML="0=\uD83D\uDD5B|1=\uD83D\uDD50|2=\uD83D\uDD51|3=\uD83D\uDD52|4=\uD83D\uDD53|5=\uD83D\uDD54|6=\uD83D\uDD55|7=\uD83D\uDD56|8=\uD83D\uDD57|9=\uD83D\uDD58|10=\uD83D\uDD59|11=\uD83D\uDD5A";
+			};
+		</script>
+	</head>
+	<body id="body" onload="StartUp();">
+		<h1><div class="logo"></div><div class="title">i18x Validator V0.9β</div></h1>
+		<div class="subtitle">
+			i18x is a XML like open source culture translation format.
+			It's the smart way to create platform independend translations with grammatical, syntactic and metameric rules including flexible number-, unit- and calendar-formats and named placeholders support.
+			Here you will find more information: <nobr/><a href="i18x%20Translators%20Quick%20Guide.pdf#pagemode=bookmarks&zoom=100" target="i18xTransQuickGuide">i18x Translators Quick Guide</a></nobr> · <nobr/><a href="i18x.pdf#pagemode=bookmarks&zoom=100" target="i18xDoc">i18x Format Definition</a></nobr>.<br/>
+		</div>
+		<div id="categories" class="categories"></div>
+		<form id="validationform">
+			<div id="textphaseplainbox">
+				<h2>
+					i18x Text Phrase (Plain Text)
+					<input type="button" value="Show JSON String Coded" onclick="ShowJSONTextPhrase();"/>
+					Font:
+					<select "document.getElementById('textphraseplain').style.fontFamily=this.value;">
+						<option value="Courier New" selected>Courier New</option>
+						<option value="Symbola">Symbola</option>
+						<option value="Arial">Arial</option>
+					</select>
+				</h2>
+				<textarea id="textphraseplain" rows="10" class="textphrase plain" wrap="off"></textarea>
+			</div>
+			<div id="textphasejsonbox">
+				<h2>
+					i18x Text Phrase (JSON String Coded)
+					<input type="button" value="Show Plain Text" onclick="ShowPlainTextPhrase();"/>
+					Font:
+					<select "document.getElementById('textphrasejson').style.fontFamily=this.value;">
+						<option value="Courier New" selected>Courier New</option>
+						<option value="Symbola">Symbola</option>
+						<option value="Arial">Arial</option>
+					</select>
+				</h2>
+				<textarea id="textphrasejson" rows="10" class="textphrase json" wrap="on"></textarea>
+			</div>
+			<div>
+				<h2>Placeholder JSON 1</h2>
+				<textarea id="placeholders0" rows="1" class="placeholder" wrap="on"></textarea>
+				<input type="button" value="Translate" onclick="Translate(0)"/>
+			</div>
+			<div>
+				<h2>Placeholder JSON 2</h2>
+				<textarea id="placeholders1" rows="1" class="placeholder" wrap="on"></textarea>
+				<input type="button" value="Translate" onclick="Translate(1)"/>
+			</div>
+			<div>
+				<h2>Placeholder JSON 3</h2>
+				<textarea id="placeholders2" rows="1" class="placeholder" wrap="on"></textarea>
+				<input type="button" value="Translate" onclick="Translate(2)"/>
+			</div>
+			<div>
+				<h2>Placeholder JSON 4</h2>
+				<textarea id="placeholders3" rows="1" class="placeholder" wrap="on"></textarea>
+				<input type="button" value="Translate" onclick="Translate(3)"/>
+			</div>
+			<div>
+				<h2>Placeholder JSON 5</h2>
+				<textarea id="placeholders4" rows="1" class="placeholder" wrap="on"></textarea>
+				<input type="button" value="Translate" onclick="Translate(4)"/>
+			</div>
+			<div id="resultplainbox">
+				<h2>
+					Translation Result (Plain Text)
+					<input type="button" value="Show HTML" onclick="ShowHTMLResult();"/>
+					Font:
+					<select onchange="document.getElementById('resultplain').style.fontFamily=this.value;">
+						<option value="Symbola">Symbola</option>
+						<option value="Arial" selected>Arial</option>
+					</select>
+				</h2>
+				<textarea id="resultplain" rows="5" class="resultplain" wrap="off"></textarea>
+			</div>
+			<div id="resulthtmlbox">
+				<h2>
+					Translation Result (HTML)
+					<input type="button" value="Show Plain Text" onclick="ShowPlainTextResult();"/>
+					Font:
+					<select onchange="document.getElementById('resulthtml').style.fontFamily=this.value;">
+						<option value="Symbola" selected>Symbola</option>
+						<option value="Arial">Arial</option>
+					</select>
+				</h2>
+				<div id="resulthtml" class="resulthtml"></div>
+			</div>
+		</form>
+		<center class="footer">
+			©2014 <a href="http://www.dongleware.com" target="dongeware">Dongleware Verlags GmbH</a>, published under <a href="http://en.wikipedia.org/wiki/MIT_License" target="mit">MIT</a> licence.
+		</center>
+	</body>
+</html>
